@@ -1,5 +1,4 @@
-/*
-
+#pragma once
 #include <vector>
 #include <iostream>
 
@@ -21,9 +20,4 @@ class Matrix {
 	// functions
 	Matrix getRow(int row) const;
 	friend Matrix product(const Matrix& a, const Matrix& b);
-}
-
-
-
-
-*/
+};
