@@ -5,6 +5,6 @@
 
 */
 typedef unsigned dimension;
-int jacobi();
+int jacobi(double** S, dimension n, double* w, double** V);
 void jacobi_set_max_iterations();
 
