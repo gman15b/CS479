@@ -20,6 +20,9 @@ Gabriel Bermeo & Alden Bauman
 #include "ReadImageHeader.cpp"
 #include "WriteImage.cpp"
 #include "image.cpp"
+#include "cstring"
+
+using namespace std;
 
 
 int main() {
@@ -84,21 +87,53 @@ int main() {
     ImageType imageBank[4][1205];
 
 
-    // iterates through all files in directory and stores their contents
-    const char* path = "/home/alden/Desktop/CS479/Proj3/Faces_FA_FB/fa_H";//"Proj3/Faces_FA_FB";
-    int x = 0;
+    // path for source files
+    const char* path = "/home/alden/Desktop/CS479/Proj3/Faces_FA_FB";//"Proj3/Faces_FA_FB";
 
-    DIR *dir; struct dirent *diread;
+
+    DIR *dir; 
+    DIR *dir2; 
+    struct dirent *dirRead;
+    struct dirent *fileRead;
     std::vector<char *> files;
 
+    // iterates through all files in directory and stores their contents
     if ((dir = opendir(path)) != nullptr) {
-        while ((diread = readdir(dir)) != nullptr) {
-            files.push_back(diread->d_name);
+        int x = 0;
+        while ((dirRead = readdir(dir)) != nullptr) {
+            int y = -2; // starts at -2 to prevent noise in image files
+            string extension = dirRead->d_name;
+            string base = path;
+            string combined = base + "/" + extension;
+
+            const char* combinedPath = &combined[0];
+            std::cout << combinedPath << endl;
+            if ((dir2 = opendir(combinedPath)) != nullptr) {
+                while ((fileRead = readdir(dir2)) != nullptr) {
+                    string extension2 = fileRead->d_name;
+                    string imageLoc = combinedPath + extension2;
+                    char* imageLocChar = &imageLoc[0];
+                    // imports image at imageLocChar location
+                    if (y >= 0) {
+                        std::cout << fileRead->d_name << "| ";
+                        char* entry = imageLocChar;
+                        bool isImage;
+                        readImageHeader(entry, N, M, Q, isImage); // read name
+                        ImageType inputImg(N, M, Q); // initiate base and test images
+                        readImage(entry, inputImg);
+                        imageBank[x][y] = inputImg;
+                    }
+
+                    y += 1;
+                }
+            }
+            x += 1;
+
+            //            files.push_back(diread->d_name);
         }
         closedir (dir);
     } else {
         perror ("opendir");
-        return EXIT_FAILURE;
     }
 
     for (auto file : files) std::cout << file << "| ";
