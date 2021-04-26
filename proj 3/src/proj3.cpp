@@ -191,11 +191,59 @@ int main() {
 
     //holds eigenvectors for set of faces
     double** eigenBank = new double*[cols];
+    double combinedEigen[cols];
+    double totalEigen = 0.0; // holds total of eigen vals to normalize
 
     // collects eigeenvalues for all faces, stores them in eigenBank
     for (int x = 0; x < imageToParse; x++) {
         eigenBank[x] = runJacobi(imageBank[0][x], rows, cols);
     }
+
+    //prints out all eigenvalues
+    /*for (int x = 1; x < imageToParse; x++) {
+        for (int y = 1; y < cols; y++) {
+            std::cout << " " << eigenBank[x][y];
+        }
+        std::cout << "\n";
+    }*/
+
+    //makes combined eigenvector and normalizes it
+    for (int x = 1; x < cols; x++) {
+        combinedEigen[x] = 0.0;
+        for (int y = 1; y < imageToParse; y++) {
+            combinedEigen[x] += eigenBank[y][x];
+            //std::cout << " " << eigenBank[x][y];
+            totalEigen += eigenBank[y][x];
+        }
+        combinedEigen[x] /= (imageToParse - 1);
+        //std::cout << combinedEigen[x] << " ";
+    }
+    totalEigen /= (imageToParse - 1);
+
+    // attempted eigenface creation
+    ImageType im1 = imageBank[0][5];
+    // applys eigenvectors to each pixel
+    for (int x = 0; x < rows; x++) {
+        for (int y = 0; y < cols; y++) {
+            int currentPixel;
+            double eigenPixel = 0;
+            im1.getPixelVal(y, x, currentPixel);
+            eigenPixel = currentPixel * combinedEigen[y] / totalEigen;
+
+            /*for (int j = 1; j < cols; j++) {  // would allow for combined recreation
+                //for (int i = 1; i < imageToParse; i++) 
+                //    eigenPixel += eigenBank[i][j] * (double)currentPixel;
+                eigenPixel += combinedEigen[j] * currentPixel / totalEigen;
+            }*/
+                std::cout << eigenPixel<< " ";
+        }
+        std::cout << "\n";
+        //im1.getPixelVal(y, x, currentPixel);
+        //std::cout << " " << currentPixel;
+    }
+
+    //}*/
+            
 
 
 
