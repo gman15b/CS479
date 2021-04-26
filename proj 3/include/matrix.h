@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 
-// define what a matrix is for use throughout project
+// define what a matrix is for use through/home/gbermeo/Desktop/CS479/proj 3/include/ReadImage.cppout project
 
 using namespace std;
 
