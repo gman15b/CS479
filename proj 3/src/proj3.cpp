@@ -89,7 +89,7 @@ int main() {
     // output images
     char out1[30] = "Output_1A.pgm";
 
-    ImageType imageBank[4][1205];
+    ImageType imageBank[4][1505];
 
     // path for source files 
     char cwd[PATH_MAX];
@@ -115,25 +115,27 @@ int main() {
             string base = path;
             string combined = base + "/" + extension;
 
-            const char* combinedPath = &combined[0];
-            std::cout << combinedPath << endl;
-            if ((dir2 = opendir(combinedPath)) != nullptr) {
-                while ((fileRead = readdir(dir2)) != nullptr) {
-                    string extension2 = fileRead->d_name;
-                    string imageLoc = combined + "/" + extension2;
-                    char* imageLocChar = &imageLoc[0];
-                    // imports image at imageLocChar location
-                    if (y >= 0) {
-                        std::cout << fileRead->d_name << "| ";
-                        char* entry = imageLocChar;
-                        bool isImage;
-                        readImageHeader(entry, N, M, Q, isImage); // read name
-                        ImageType inputImg(N, M, Q); // initiate base and test images
-                        readImage(entry, inputImg);
-                        imageBank[x][y] = inputImg;
-                    }
+            if (extension[0] != '.') {
+                const char* combinedPath = &combined[0];
+                //std::cout << combinedPath << endl;
+                if ((dir2 = opendir(combinedPath)) != nullptr) {
+                    while ((fileRead = readdir(dir2)) != nullptr) {
+                        string extension2 = fileRead->d_name;
+                        string imageLoc = combined + "/" + extension2;
+                        char* imageLocChar = &imageLoc[0];
+                        std::cout << imageLoc << endl;
+                        // imports image at imageLocChar location
+                        if (y >= 0) {
+                            char* entry = imageLocChar;
+                            bool isImage;
+                            readImageHeader(entry, N, M, Q, isImage); // read name
+                            ImageType inputImg(N, M, Q); // initiate base and test images
+                            readImage(entry, inputImg);
+                            imageBank[x][y] = inputImg;
+                        }
 
-                    y += 1;
+                        y += 1;
+                    }
                 }
             }
             x += 1;
