@@ -17,5 +17,7 @@ class Matrix {
 		Matrix(int row, int col, vector<vector<double>> input);
 	// functions
 		Matrix getRow(int rowNum) const;
+		double** convertMatrix();
+		double* convertValues();
 		Matrix trans(); // transpose matrix items
 };
