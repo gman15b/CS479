@@ -2,7 +2,6 @@
 #include <vector>
 #include <iostream>
 
-
 // define what a matrix is for use throughout project
 
 using namespace std;
@@ -10,7 +9,7 @@ using namespace std;
 class Matrix {
 	public:
 	// variables
-		int columns;
+		int cols;
 		int rows;
 		vector<vector<double>> items; // items in a row, here 2d array of double for the images
 	// constructors	
@@ -18,7 +17,6 @@ class Matrix {
 		Matrix(int row, int col); 
 		Matrix(int row, int col, vector<vector<double>> input);
 	// functions
-		void printMatrix();
-		Matrix getRow(int row) const;
-		friend Matrix product(const Matrix& a, const Matrix& b);
+		Matrix getRow(int rowNum) const;
+		Matrix trans(); // transpose matrix items
 };

@@ -9,7 +9,7 @@ using namespace std;
 class Matrix {
 	public:
 	// variables
-		int columns;
+		int cols;
 		int rows;
 		vector<vector<double>> items; // items in a row, here 2d array of double for the images
 	// constructors	
@@ -18,19 +18,19 @@ class Matrix {
 		Matrix(int row, int col, vector<vector<double>> input);
 	// functions
 	Matrix getRow(int row) const;
-	friend Matrix product(const Matrix& a, const Matrix& b);
+	Matrix trans(); // transpose matrix items
 }
 */
 
 Matrix::Matrix(int row, int col){
-	columns = col;
+	cols = col;
 	rows = row;
 	vector<vector<double>> empty (col, vector<double>(row, 0)); // create empty 2d vector
 	copy(empty.begin(), empty.end(), back_inserter(items)); // copy into matrix
 }
 
 Matrix::Matrix(int row, int col, vector<vector<double>> input){
-	columns = col;
+	cols = col;
 	rows = row;
 	try{
 	copy(input.begin(), input.end(), back_inserter(items)); // copy into matrix
@@ -39,11 +39,26 @@ Matrix::Matrix(int row, int col, vector<vector<double>> input){
 	}
 }
 
-
-void Matrix::printMatrix(){
-	for(int i = 0; i < items.size(); i++){
-		for(int j = 0; j < items[i].size(); j++){
-			
-		}
+Matrix Matrix::getRow(int rowNum) const{ //row num must be valid
+	vector<vector<double>> temp; 
+	try{
+	temp.push_back(items[rowNum]);
+	catch(exception e){
+		cout << "Invalid rowNum." << endl;
+		return;
 	}
+	return Matrix(1, cols, temp); // return matrix with 1 row, same cols, with values of new row
+}
+
+Matrix Matrix::trans(){ // iterate matrix, transpose its items
+	vector<vector<double>> transItems;
+	for(int i = 0; i < rows; i++){ // iterate 2d vector i.e. matrix
+		vector<double> row; // single row
+		for(int j = 0; j < cols; j++){
+			row.push_back(items[j][i]); // transpose 
+		}
+		transItems.push_back(row);
+	}
+	return Matrix(cols, rows, transItems); // return transposed array, swapping cols and rows
+
 }

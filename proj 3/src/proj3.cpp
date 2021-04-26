@@ -1,6 +1,8 @@
-//Alden Bauman
-//Proj 1
-//CS 479
+/*
+Project 3
+CS 479
+Gabriel Bermeo & Alden Bauman
+*/
 #include <iostream>
 #include <math.h>
 #include <stdlib.h>
