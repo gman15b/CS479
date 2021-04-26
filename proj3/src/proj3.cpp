@@ -256,7 +256,7 @@ int main() {
 
     // attempted eigenface creation
     ImageType im1 = meanFace;
-    for (int pic = 0; pic < imageToParse; pic++) {
+    for (int i = 1; i < rows; i++) {
         ImageType outputImage(cols, rows, 250);
         // applys eigenvectors to each pixel
         for (int x = 0; x < rows; x++) {
@@ -270,21 +270,23 @@ int main() {
                 minEigen = 9999.0;
                 maxEigen = -9999.0;
 
-                for (int i = 1; i < cols; i++) {
-                    int currentPicture = 28;
-                    eigenPixel += eigenBank[pic][i];// * currentPixel;
-                    if (eigenBank[pic][i] > maxEigen)
-                        maxEigen = eigenBank[pic][i];
-                    if (eigenBank[pic][i] < minEigen)
-                        minEigen = eigenBank[pic][i];
+                for (int pic = 1; pic < imageToParse; pic++) {
+                    int pixelVal = eigenBank[pic][i];
+                    eigenPixel += pixelVal * currentPixel;
+                    if (pixelVal > maxEigen)
+                        maxEigen = pixelVal;
+                    if (pixelVal < minEigen)
+                        minEigen = pixelVal;
                 }
-                eigenPixel -= currentPixel;
-                int normalizedPixel = (int)255*(eigenPixel-minEigen)/(maxEigen-minEigen);
+                eigenPixel /= imageToParse;
+                //normalizedPixel -= currentPixel;
+                int normalizedPixel = (int)(eigenPixel-minEigen)/(maxEigen-minEigen);
+
                 outputImage.setPixelVal(y,x,normalizedPixel);
-                if (pic == 5)
+                if (i == 5)
                     std::cout << normalizedPixel<< " ";
             }
-            if (pic == 5)
+            if (i == 5)
                 std::cout << "\n";
             //im1.getPixelVal(y, x, currentPixel);
             //std::cout << " " << currentPixel;
@@ -295,7 +297,7 @@ int main() {
         char tmp2[] = ".pgm";
         char * outputLoc = new char[30];
         std::strcpy(outputLoc,tmp1);
-        std::strcat(outputLoc,to_string(pic).c_str());
+        std::strcat(outputLoc,to_string(i).c_str());
         std::strcat(outputLoc,tmp2);
 
         // outputs test eigenface
