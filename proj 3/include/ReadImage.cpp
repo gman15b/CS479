@@ -32,16 +32,15 @@ void readImage(char fname[], ImageType& image)
       cout << "Image " << fname << " is not PGM" << endl;
       exit(1);
  }
-
-ifp.getline(header,100,'\n');
+ 
+// modified due to new headers
  while(header[0]=='#')
    ifp.getline(header,100,'\n');
 
- M=strtol(header,&ptr,0);
- N=atoi(ptr);
+ M=strtol(header+3,&ptr,0);
+ N=strtol(ptr, &ptr, 0);
+ Q=strtol(ptr, &ptr, 0);
 
- ifp.getline(header,100,'\n');
- Q=strtol(header,&ptr,0);
 
  charImage = (unsigned char *) new unsigned char [M*N];
 

@@ -26,6 +26,7 @@ using namespace std;
 
 
 int main() {
+// Part 1 testing for known eigenvalues.
     int arrSize = 4;
     double testArr[arrSize][arrSize] = {{0,0,0,0}, {0,1,0,0}, {0,2,1,1}, {0,0,0,1}};
     double** testArrPtr = new double*[arrSize];
@@ -76,7 +77,9 @@ int main() {
         std::cout << "\n";
 
     }
-
+///////////////////////////////////////////////////////////////////////
+// Part 2, reading in images for use.
+//////////////////////////////////////////////////////////////////////
     //Variables
     int N, M, Q;
     // input images stored as char arrays
@@ -88,7 +91,7 @@ int main() {
 
 
     // path for source files
-    const char* path = "/home/alden/Desktop/CS479/Proj3/Faces_FA_FB";//"Proj3/Faces_FA_FB";
+    const char* path = "/home/gbermeo/Desktop/CS479/proj 3/Faces_FA_FB";//"Proj3/Faces_FA_FB";
 
 
     DIR *dir; 
@@ -111,7 +114,7 @@ int main() {
             if ((dir2 = opendir(combinedPath)) != nullptr) {
                 while ((fileRead = readdir(dir2)) != nullptr) {
                     string extension2 = fileRead->d_name;
-                    string imageLoc = combinedPath + extension2;
+                    string imageLoc = combined + "/" + extension2;
                     char* imageLocChar = &imageLoc[0];
                     // imports image at imageLocChar location
                     if (y >= 0) {

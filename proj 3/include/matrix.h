@@ -1,5 +1,4 @@
 #pragma once
-#include <vector>
 #include <iostream>
 
 // define what a matrix is for use throughout project

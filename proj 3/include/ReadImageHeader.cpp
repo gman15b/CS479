@@ -39,16 +39,12 @@ void readImageHeader(char fname[], int& N, int& M, int& Q, bool& type)
    exit(1);
  }
 
-ifp.getline(header,100,'\n');
  while(header[0]=='#')
    ifp.getline(header,100,'\n');
 
- M=strtol(header,&ptr,0);
- N=atoi(ptr);
-
- ifp.getline(header,100,'\n');
-
- Q=strtol(header,&ptr,0);
+ M=strtol(header+3,&ptr,0);
+ N=strtol(ptr, &ptr, 0);
+ Q=strtol(ptr, &ptr, 0);
 
  ifp.close();
 
