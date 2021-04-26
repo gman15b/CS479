@@ -31,8 +31,6 @@ double* runJacobi(ImageType image, int rows, int cols){ // converts matrix to 2d
     double** covMatrix = new double*[cols];
     double* eigenValues = new double[cols];
 
-
-
     for(int i = 0; i < cols; i++){
 	    dblImages[i] = new double[rows];
         covMatrix[i] = new double[rows];
@@ -57,48 +55,50 @@ int main() {
     double** testArrCov = new double*[arrSize];
 
     // JACOBI CHECK
-
-    // initialize pointer arrays
-    for (int x = 0; x < arrSize; x++) {
-        testArrPtr[x] = new double[arrSize];
-        testArrCov[x] = new double[arrSize];
-    }
-    
-    // assign values
-    for (int x = 0; x < arrSize; x++) {
-        for (int y = 0; y < arrSize; y++) {
-            testArrPtr[x][y] = testArr[x][y];
+    bool checkJacobi = false;
+    if (checkJacobi) {
+        // initialize pointer arrays
+        for (int x = 0; x < arrSize; x++) {
+            testArrPtr[x] = new double[arrSize];
+            testArrCov[x] = new double[arrSize];
         }
-    }
-
-    // print array to compare with after
-    for (int x = 0; x < arrSize; x++) {
-        for (int y = 0; y < arrSize; y++) {
-            std::cout << testArrPtr[x][y] << " ";
-        }
-        std::cout << "\t" << eigenTest[x] << "\t";
-
-        for (int y = 0; y < arrSize; y++) {
-            std::cout << testArrCov[x][y] << " ";
-        }
-        std::cout << "\n";
-    }
-    std::cout << "\n";
-
-    jacobi(testArrPtr, arrSize-1, eigenTest, testArrCov);
-
-    for (int x = 0; x < arrSize; x++) {
-        for (int y = 0; y < arrSize; y++) {
-            std::cout << testArrPtr[x][y] << " ";
+        
+        // assign values
+        for (int x = 0; x < arrSize; x++) {
+            for (int y = 0; y < arrSize; y++) {
+                testArrPtr[x][y] = testArr[x][y];
+            }
         }
 
-        std::cout << "\t" << eigenTest[x] << "\t";
+        // print array to compare with after
+        for (int x = 0; x < arrSize; x++) {
+            for (int y = 0; y < arrSize; y++) {
+                std::cout << testArrPtr[x][y] << " ";
+            }
+            std::cout << "\t" << eigenTest[x] << "\t";
 
-        for (int y = 0; y < arrSize; y++) {
-            std::cout << testArrCov[x][y] << " ";
+            for (int y = 0; y < arrSize; y++) {
+                std::cout << testArrCov[x][y] << " ";
+            }
+            std::cout << "\n";
         }
         std::cout << "\n";
 
+        jacobi(testArrPtr, arrSize-1, eigenTest, testArrCov);
+
+        for (int x = 0; x < arrSize; x++) {
+            for (int y = 0; y < arrSize; y++) {
+                std::cout << testArrPtr[x][y] << " ";
+            }
+
+            std::cout << "\t" << eigenTest[x] << "\t";
+
+            for (int y = 0; y < arrSize; y++) {
+                std::cout << testArrCov[x][y] << " ";
+            }
+            std::cout << "\n";
+
+        }
     }
 ///////////////////////////////////////////////////////////////////////
 // Part 2, reading in images for use.
@@ -230,18 +230,15 @@ int main() {
     }
 
     //prints out all eigenvalues
-    for (int x = 1; x < imageToParse; x++) {
-        for (int y = 1; y < cols; y++) {
+    /*for (int x = 1; x < imageToParse; x++) {
+        for (int y = 1; y < rows; y++) {
             std::cout << " " << eigenBank[x][y];
         }
         std::cout << "\n";
-    }
-
-    double minEigen = -9999.0;
-    double maxEigen = 9999.0;
+    }*/
 
     //makes combined eigenvector and normalizes it
-    for (int x = 1; x < cols; x++) {
+    for (int x = 1; x < rows; x++) {
         combinedEigen[x] = 0.0;
         for (int y = 1; y < imageToParse; y++) {
             combinedEigen[x] += eigenBank[y][x];
@@ -254,32 +251,59 @@ int main() {
     }
     totalEigen /= (imageToParse - 1);
 
-    // attempted eigenface creation
-    ImageType im1 = imageBank[0][5];
-    // applys eigenvectors to each pixel
-    for (int x = 0; x < rows; x++) {
-        for (int y = 0; y < cols; y++) {
-            int currentPixel;
-            double eigenPixel = 0;
-            im1.getPixelVal(y, x, currentPixel);
-            eigenPixel = currentPixel * combinedEigen[y] / totalEigen;
+    double minEigen = -9999.0;
+    double maxEigen = 9999.0;
 
-            /*for (int j = 1; j < cols; j++) {  // would allow for combined recreation
-                //for (int i = 1; i < imageToParse; i++) 
-                //    eigenPixel += eigenBank[i][j] * (double)currentPixel;
-                eigenPixel += combinedEigen[j] * currentPixel / totalEigen;
-            }*/
-                //std::cout << eigenPixel<< " ";
+    // attempted eigenface creation
+    ImageType im1 = meanFace;
+    for (int pic = 0; pic < imageToParse; pic++) {
+        ImageType outputImage(cols, rows, 250);
+        // applys eigenvectors to each pixel
+        for (int x = 0; x < rows; x++) {
+            for (int y = 0; y < cols; y++) {
+                int currentPixel;
+                double eigenPixel = 0;
+                im1.getPixelVal(y, x, currentPixel);
+                //eigenPixel = currentPixel * combinedEigen[y] / totalEigen;
+
+                //keeps track of max and min eigenvalues so results can be normalized
+                minEigen = 9999.0;
+                maxEigen = -9999.0;
+
+                for (int i = 1; i < cols; i++) {
+                    int currentPicture = 28;
+                    eigenPixel += eigenBank[pic][i];// * currentPixel;
+                    if (eigenBank[pic][i] > maxEigen)
+                        maxEigen = eigenBank[pic][i];
+                    if (eigenBank[pic][i] < minEigen)
+                        minEigen = eigenBank[pic][i];
+                }
+                eigenPixel -= currentPixel;
+                int normalizedPixel = (int)255*(eigenPixel-minEigen)/(maxEigen-minEigen);
+                outputImage.setPixelVal(y,x,normalizedPixel);
+                if (pic == 5)
+                    std::cout << normalizedPixel<< " ";
+            }
+            if (pic == 5)
+                std::cout << "\n";
+            //im1.getPixelVal(y, x, currentPixel);
+            //std::cout << " " << currentPixel;
         }
-        //std::cout << "\n";
-        //im1.getPixelVal(y, x, currentPixel);
-        //std::cout << " " << currentPixel;
+
+        // creates output filename
+        char tmp1[] = "eigenFaces/test";
+        char tmp2[] = ".pgm";
+        char * outputLoc = new char[30];
+        std::strcpy(outputLoc,tmp1);
+        std::strcat(outputLoc,to_string(pic).c_str());
+        std::strcat(outputLoc,tmp2);
+
+        // outputs test eigenface
+        writeImage(outputLoc, outputImage);
+        delete [] outputLoc;
     }
 
     //}*/
-            
-
-
 
     /*Matrix matrixBank[4][1205];
 
