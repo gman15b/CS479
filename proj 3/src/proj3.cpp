@@ -22,6 +22,8 @@ Gabriel Bermeo & Alden Bauman
 #include "image.cpp"
 #include "cstring"
 
+#include <unistd.h>
+
 using namespace std;
 
 
@@ -89,9 +91,13 @@ int main() {
 
     ImageType imageBank[4][1205];
 
-
-    // path for source files
-    const char* path = "/home/gbermeo/Desktop/CS479/proj 3/Faces_FA_FB";//"Proj3/Faces_FA_FB";
+    // path for source files 
+    char cwd[PATH_MAX];
+    getcwd(cwd, sizeof(cwd));
+    char path[100];
+    char images[30] = "/Faces_FA_FB";
+    strcpy(path,cwd);
+    strcat(path,images);
 
 
     DIR *dir; 
