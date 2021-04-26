@@ -8,8 +8,10 @@
 #include <cstdio>
 #include <time.h>
 
-#include <filesystem>
+//#include <filesystem>
+#include <dirent.h>
 #include <string>
+#include <vector>
 
 #include "jacobi.cpp"
 #include "ReadImage.cpp"
@@ -81,9 +83,25 @@ int main() {
 
 
     // iterates through all files in directory and stores their contents
-    std::string path = "Proj3/Faces_FA_FB";
+    const char* path = "/home/alden/Desktop/CS479/Proj3/Faces_FA_FB/fa_H";//"Proj3/Faces_FA_FB";
     int x = 0;
-    for (const auto & imageFolder : std::filesystem::directory_iterator(path)) {
+
+    DIR *dir; struct dirent *diread;
+    std::vector<char *> files;
+
+    if ((dir = opendir(path)) != nullptr) {
+        while ((diread = readdir(dir)) != nullptr) {
+            files.push_back(diread->d_name);
+        }
+        closedir (dir);
+    } else {
+        perror ("opendir");
+        return EXIT_FAILURE;
+    }
+
+    for (auto file : files) std::cout << file << "| ";
+    std::cout << endl;
+    /*for (const auto & imageFolder : std::filesystem::directory_iterator(path)) {
         int y = 0;
         //std::string newDir = path + imageFolder;
         for (const auto & entry : std::filesystem::directory_iterator(path)) {
@@ -94,7 +112,7 @@ int main() {
             y += 1;
         }
         x += 1;
-    }
+    }*/
 
     // math variables
     double mean[2], sigma[2][2] = {{0,0}, {0,0}};
