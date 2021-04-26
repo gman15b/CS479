@@ -51,4 +51,5 @@ ifp.getline(header,100,'\n');
  Q=strtol(header,&ptr,0);
 
  ifp.close();
+
 }

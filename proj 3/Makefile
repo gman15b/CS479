@@ -8,8 +8,8 @@ TARGET := $(BIN_DIR)/proj3
 SRC := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ := $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
-CXX_FLAGS := -Iinclude -std=c++11 -g
-CC := g++
+CXX_FLAGS := -Iinclude -std=c++17 -g
+CC := g++-8
 LDFLAGS  := -Llib
 LDLIBS   := -lm
 

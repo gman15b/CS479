@@ -16,16 +16,16 @@ void writeImage(char fname[], ImageType& image)
 
  image.getImageInfo(N, M, Q);
 
- charImage = (unsigned char *) new unsigned char [3*M*N];
+ charImage = (unsigned char *) new unsigned char [M*N];
 
- RGB val;
+ // convert the integer values to unsigned char
+
+ int val;
 
  for(i=0; i<N; i++)
-   for(j=0; j<3*M; j+=3) {
-     image.getPixelVal(i, j/3, val);
-     charImage[i*3*M+j]=(unsigned char)val.r;
-     charImage[i*3*M+j+1]=(unsigned char)val.g;
-     charImage[i*3*M+j+2]=(unsigned char)val.b;
+   for(j=0; j<M; j++) {
+     image.getPixelVal(i, j, val);
+     charImage[i*M+j]=(unsigned char)val;
    }
 
  ofp.open(fname, ios::out | ios::binary);
@@ -35,11 +35,11 @@ void writeImage(char fname[], ImageType& image)
    exit(1);
  }
 
- ofp << "P6" << endl;
+ ofp << "P5" << endl;
  ofp << M << " " << N << endl;
  ofp << Q << endl;
 
- ofp.write( reinterpret_cast<char *>(charImage), (3*M*N)*sizeof(unsigned char));
+ ofp.write( reinterpret_cast<char *>(charImage), (M*N)*sizeof(unsigned char));
 
  if (ofp.fail()) {
    cout << "Can't write image " << fname << endl;
@@ -49,4 +49,5 @@ void writeImage(char fname[], ImageType& image)
  ofp.close();
 
  delete [] charImage;
+
 }
