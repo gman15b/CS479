@@ -11,10 +11,11 @@
 #include <filesystem>
 #include <string>
 
-#include "jacobi.h"
+#include "jacobi.cpp"
 #include "ReadImage.cpp"
 #include "ReadImageHeader.cpp"
 #include "WriteImage.cpp"
+#include "image.cpp"
 
 
 int main() {
