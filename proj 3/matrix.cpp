@@ -34,21 +34,16 @@ Matrix::Matrix(int row, int col, vector<vector<double>> input){
 	rows = row;
 	try{
 	copy(input.begin(), input.end(), back_inserter(items)); // copy into matrix
-	}catch(Error e){
+	}catch(exception e){
 		cout << "Error copying matrix items." << endl;
 	}
 }
 
 
-Matrix::printMatrix(){
+void Matrix::printMatrix(){
 	for(int i = 0; i < items.size(); i++){
 		for(int j = 0; j < items[i].size(); j++){
 			
 		}
 	}
-
-
-
-
-
 }

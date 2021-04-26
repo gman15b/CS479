@@ -18,6 +18,7 @@ class Matrix {
 		Matrix(int row, int col); 
 		Matrix(int row, int col, vector<vector<double>> input);
 	// functions
-	Matrix getRow(int row) const;
-	friend Matrix product(const Matrix& a, const Matrix& b);
+		void printMatrix();
+		Matrix getRow(int row) const;
+		friend Matrix product(const Matrix& a, const Matrix& b);
 };
