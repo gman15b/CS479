@@ -66,12 +66,12 @@ Matrix Matrix::trans(){ // iterate matrix, transpose its items
 void Matrix::convertImage(ImageType image){ // iterate matrix, transpose its items
 	for(int i = 0; i < rows; i++ ){
 		for(int j = 0; j < cols; j++){
-			image.getPixel(i, j, items[i][j])
+			image.getPixel(i, j, items[i][j]);
 		}
 	}
 }
 
-void Matrix::runJacobi(){ // iterate matrix, transpose its items
+void Matrix::runJacobi(){ // converts matrix to 2d pointer and runs jacobi on it
 	double** dblImages = new double*[cols];
 
 	for(int i = 0; i < rows; i++){
@@ -83,4 +83,48 @@ void Matrix::runJacobi(){ // iterate matrix, transpose its items
 
 	worked = jacobi(dblImages, rows-1; eigenValues, covMatrix);
 
+}
+
+// average a matrix's eigen values
+double Matrix::eigenAvg(){
+	double avg = 0;
+	if(eigenValues == null){ return avg;}
+	for(int i = 0; i < rows; i++){
+		avg += eigenValues[i];
+	}
+	return avg/rows;
+}
+
+
+//////////////////// friend functions //////////////////////////////////////////
+
+// sort eigenvalues of matrix, returning sorted matrix.
+// takes in matrix and reference to array.
+// note:jacobi takes array doubles for eigen values (w), and 2d doubles / matrix (v) 
+
+Matrix idMatrix(int size){ //return an identity matrix of given dimensions
+	Matrix identity = Matrix( size, size)
+	for(int i = 0; i < size; i++){
+		for(int j = 0; j < size; j++){
+			if(i == j){ identity.items[i][j] = 1; } // set diagonal to 1
+		}
+	}
+	return identity;
+}
+
+// this takes in vector of eigenvalues, and matrix of eigenvectors.
+pair<double[], Matrix> sortEigen(double[] values, Matrix vectors){
+		// iterate values
+		int n = sizeof(arr) / sizeof(arr[0]);
+		sort(values, values + n); // sort descending
+		vector<vector<double>> newVectors (vectors.cols, vector<double>(vectors.rows, 0)); // create empty 2d vector
+		int index = 0;
+		for(int i = 0; i < newVectors.rows; i++){
+			for(int j = 0; j < newVectors.cols; j++){
+					if(i == index++){ 
+						newVectors[i][j] == values[i];
+					}
+			}
+		}
+		return pair<values, newVectors>;
 }

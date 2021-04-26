@@ -1,6 +1,9 @@
 #pragma once
 #include <iostream>
 #include "image.h"
+#include <cmath>
+#include <algorithm>
+
 // define what a matrix is for use through/home/gbermeo/Desktop/CS479/proj 3/include/ReadImage.cppout project
 
 using namespace std;
@@ -25,4 +28,9 @@ class Matrix {
 		Matrix trans(); // transpose matrix items
 		void convertImage(ImageType imageBank**); // convert 1 image into 2d vector for images
 		void runJacobi();
+		double eigenAvg();
+		
+		// friends
+		friend Matrix idMatrix(int size);
+		friend pair<vector<double>, Matrix> sortEigen(vector<double> values, Matrix vectors);
 };
