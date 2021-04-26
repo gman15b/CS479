@@ -6,7 +6,7 @@
 
 
 */
-
+ 
 
 
 #include <math.h>
@@ -30,11 +30,11 @@ static unsigned long jacobi_max_iterations=500;
    RETURNS: >0 : number of jacobi iterations
 	    -1 : number of jacobi iterations exceeded JACOBI_MAX_ITERATIONS
 */
-int jacobi(S,n,w,V)
-double **S;
-dimension n;
-double *w;
-double **V;
+int jacobi(double** S, dimension n, double* w, double** V)
+//double **S;
+//dimension n;
+//double *w;
+//double **V;
 { iterations i,j,k,iq,ip;
   double tresh,theta,tau,t,sm,s,h,g,c;
   double p;
@@ -147,10 +147,8 @@ double **V;
 
 
 
-void jacobi_set_max_iterations(iter)
-unsigned long iter;
+void jacobi_set_max_iterations(unsigned long iter)
 { jacobi_max_iterations=iter;
-  return;
 
 
 }/* End of set_jacobi_max_iterations() */

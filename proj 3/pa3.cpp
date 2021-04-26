@@ -84,14 +84,15 @@ int main() {
     int x = 0;
     for (const auto & imageFolder : std::filesystem::directory_iterator(path)) {
         int y = 0;
-        for (const auto & entry : std::filesystem::directory_iterator(path + imageFolder)) {
-            readImageHeader(entry, N, M, Q, isImage); // read name
-            ImageType inputImg(N, M, Q); // initiate base and test images
-            readImage(entry, inputImg);
-            imageBank[x][y] = inputImg
+        //std::string newDir = path + imageFolder;
+        for (const auto & entry : std::filesystem::directory_iterator(path)) {
+            //readImageHeader(entry, N, M, Q, isImage); // read name
+            //ImageType inputImg(N, M, Q); // initiate base and test images
+            //readImage(entry, inputImg);
+            //imageBank[x][y] = inputImg;
             y += 1;
         }
-        x += 1
+        x += 1;
     }
 
     // math variables
