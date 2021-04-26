@@ -62,3 +62,25 @@ Matrix Matrix::trans(){ // iterate matrix, transpose its items
 	return Matrix(cols, rows, transItems); // return transposed array, swapping cols and rows
 
 }
+
+void Matrix::convertImage(ImageType image){ // iterate matrix, transpose its items
+	for(int i = 0; i < rows; i++ ){
+		for(int j = 0; j < cols; j++){
+			image.getPixel(i, j, items[i][j])
+		}
+	}
+}
+
+void Matrix::runJacobi(){ // iterate matrix, transpose its items
+	double** dblImages = new double*[cols];
+
+	for(int i = 0; i < rows; i++){
+		dblImages[i] = new double[i]
+		for(int j = 0; j < cols; j++){
+			temp[i][j] = images[i][j];
+		}
+	}
+
+	worked = jacobi(dblImages, rows-1; eigenValues, covMatrix);
+
+}
