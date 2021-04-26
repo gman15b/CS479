@@ -26,7 +26,7 @@ class Matrix {
 	// functions
 		Matrix getRow(int rowNum) const;
 		Matrix trans(); // transpose matrix items
-		void convertImage(ImageType imageBank**); // convert 1 image into 2d vector for images
+		void convertImage(ImageType imageBank); // convert 1 image into 2d vector for images
 		void runJacobi();
 		double eigenAvg();
 		

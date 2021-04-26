@@ -26,6 +26,27 @@ Gabriel Bermeo & Alden Bauman
 
 using namespace std;
 
+double* runJacobi(ImageType image, int rows, int cols){ // converts matrix to 2d pointer and runs jacobi on it
+    double** dblImages = new double*[cols];
+    double** covMatrix = new double*[cols];
+    double* eigenValues = new double[cols];
+
+
+
+    for(int i = 0; i < cols; i++){
+	    dblImages[i] = new double[rows];
+        covMatrix[i] = new double[rows];
+	    for(int j = 0; j < rows; j++){
+            int tempPixel;
+		    image.getPixelVal(i,j, tempPixel);
+            dblImages[i][j] = (double)tempPixel;
+        }
+    }
+
+    jacobi(dblImages, rows-1, eigenValues, covMatrix);
+    return eigenValues;
+
+}
 
 int main() {
 // Part 1 testing for known eigenvalues.
@@ -89,7 +110,9 @@ int main() {
     // output images
     char out1[30] = "Output_1A.pgm";
 
-    ImageType imageBank[4][1505];
+    ImageType imageBank[4][605]; // 1205
+    int imageToParse = 150;
+
 
     // path for source files 
     char cwd[PATH_MAX];
@@ -98,6 +121,13 @@ int main() {
     char images[30] = "/Faces_FA_FB";
     strcpy(path,cwd);
     strcat(path,images);
+    
+    // marks down dimensions of images
+    int highX = 48;
+    int highY = 60;
+    int lowX = 16;
+    int lowY = 20;
+
 
 
     DIR *dir; 
@@ -114,18 +144,19 @@ int main() {
             string extension = dirRead->d_name;
             string base = path;
             string combined = base + "/" + extension;
+            bool exitLoop = false;
 
-            if (extension[0] != '.') {
+            if (extension[0] != '.' && x < 4) {
                 const char* combinedPath = &combined[0];
-                //std::cout << combinedPath << endl;
+                //std::cout << combinedPath << endl << x << endl;
                 if ((dir2 = opendir(combinedPath)) != nullptr) {
-                    while ((fileRead = readdir(dir2)) != nullptr) {
+                    while ((fileRead = readdir(dir2)) != nullptr && !exitLoop) {
                         string extension2 = fileRead->d_name;
                         string imageLoc = combined + "/" + extension2;
                         char* imageLocChar = &imageLoc[0];
                         //std::cout << imageLoc << endl;
                         // imports image at imageLocChar location
-                        if (y >= 0 and y <= 150) {
+                        if (y >= 0) {
                             char* entry = imageLocChar;
                             bool isImage;
                             readImageHeader(entry, N, M, Q, isImage); // read name
@@ -135,9 +166,13 @@ int main() {
                         }
 
                         y += 1;
+                        if (y > imageToParse)
+                            exitLoop = true;
                     }
                 }
             }
+            else
+                x -= 1;
             x += 1;
 
             //            files.push_back(diread->d_name);
@@ -146,20 +181,31 @@ int main() {
     } else {
         perror ("opendir");
     }
+    
 
-    for (auto file : files) std::cout << file << "| ";
-    std::cout << endl;
-    /*for (const auto & imageFolder : std::filesystem::directory_iterator(path)) {
-        int y = 0;
-        //std::string newDir = path + imageFolder;
-        for (const auto & entry : std::filesystem::directory_iterator(path)) {
-            //readImageHeader(entry, N, M, Q, isImage); // read name
-            //ImageType inputImg(N, M, Q); // initiate base and test images
-            //readImage(entry, inputImg);
-            //imageBank[x][y] = inputImg;
-            y += 1;
-        }
-        x += 1;
+
+
+    // size of rows and columns for this set of images
+    int cols = lowY;
+    int rows = lowX;
+
+    //holds eigenvectors for set of faces
+    double** eigenBank = new double*[cols];
+
+    // collects eigeenvalues for all faces, stores them in eigenBank
+    for (int x = 0; x < imageToParse; x++) {
+        eigenBank[x] = runJacobi(imageBank[0][x], rows, cols);
+    }
+
+
+
+    /*Matrix matrixBank[4][1205];
+
+    for (int x = 0; x < imageToParse; x++) {
+        Matrix* m = new Matrix(highX, highY);
+        matrixBank[0][x] = *m;
+        matrixBank[0][x].convertImage(imageBank[0][x]);
+        matrixBank[0][x].runJacobi();
     }*/
 
     // math variables
@@ -167,13 +213,6 @@ int main() {
     double R, G, bottom, threshR, threshG;
     int counter;
 
-    // read an image in, repeat for each training image
-    bool isImage; // checks if image
-    //image 1
-    //readImageHeader(train1, N, M, Q, isImage); // read name
-    //ImageType inputImg(N, M, Q); // initiate base and test images
-    //ImageType TestImage(N, M, Q);
-    //readImage(train1, inputImg); // read named image into input
 
     bool trainingMode = true;
 
