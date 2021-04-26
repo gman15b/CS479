@@ -108,14 +108,18 @@ int main() {
             std::cout << combinedPath << endl;
             if ((dir2 = opendir(combinedPath)) != nullptr) {
                 while ((fileRead = readdir(dir2)) != nullptr) {
+                    string extension2 = fileRead->d_name;
+                    string imageLoc = combinedPath + extension2;
+                    char* imageLocChar = &imageLoc[0];
+                    // imports image at imageLocChar location
                     if (y >= 0) {
-                    std::cout << fileRead->d_name << "| ";
-                    char* entry = fileRead->d_name;
-                    bool isImage;
-                    readImageHeader(entry, N, M, Q, isImage); // read name
-                    ImageType inputImg(N, M, Q); // initiate base and test images
-                    readImage(entry, inputImg);
-                    imageBank[x][y] = inputImg;
+                        std::cout << fileRead->d_name << "| ";
+                        char* entry = imageLocChar;
+                        bool isImage;
+                        readImageHeader(entry, N, M, Q, isImage); // read name
+                        ImageType inputImg(N, M, Q); // initiate base and test images
+                        readImage(entry, inputImg);
+                        imageBank[x][y] = inputImg;
                     }
 
                     y += 1;
