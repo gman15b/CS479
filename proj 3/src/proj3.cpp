@@ -123,9 +123,9 @@ int main() {
                         string extension2 = fileRead->d_name;
                         string imageLoc = combined + "/" + extension2;
                         char* imageLocChar = &imageLoc[0];
-                        std::cout << imageLoc << endl;
+                        //std::cout << imageLoc << endl;
                         // imports image at imageLocChar location
-                        if (y >= 0) {
+                        if (y >= 0 and y <= 150) {
                             char* entry = imageLocChar;
                             bool isImage;
                             readImageHeader(entry, N, M, Q, isImage); // read name
