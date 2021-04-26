@@ -16,7 +16,7 @@ void readImage(char fname[], ImageType& image)
  ifstream ifp;
 
  ifp.open(fname, ios::in | ios::binary);
-  
+
  if (!ifp) {
    cout << "Can't read image: " << fname << endl;
    exit(1);
@@ -25,26 +25,25 @@ void readImage(char fname[], ImageType& image)
  // read header
 
  ifp.getline(header,100,'\n');
-
  if ( (header[0]!=80) ||    /* 'P' */
-      (header[1]!=54) ) {   /* '6' */
-      cout << "Image " << fname << " is not PPM" << endl;
+      (header[1]!=53) ) {   /* '5' */
+      cout << "Image " << fname << " is not PGM" << endl;
       exit(1);
  }
 
- ifp.getline(header,100,'\n');
+ifp.getline(header,100,'\n');
  while(header[0]=='#')
    ifp.getline(header,100,'\n');
 
  M=strtol(header,&ptr,0);
  N=atoi(ptr);
- 
+
  ifp.getline(header,100,'\n');
  Q=strtol(header,&ptr,0);
 
- charImage = (unsigned char *) new unsigned char [3*M*N];
+ charImage = (unsigned char *) new unsigned char [M*N];
 
- ifp.read( reinterpret_cast<char *>(charImage), (3*M*N)*sizeof(unsigned char));
+ ifp.read( reinterpret_cast<char *>(charImage), (M*N)*sizeof(unsigned char));
 
  if (ifp.fail()) {
    cout << "Image " << fname << " has wrong size" << endl;
@@ -52,19 +51,19 @@ void readImage(char fname[], ImageType& image)
  }
 
  ifp.close();
- 
- /* Convert the unsigned characters to integers */
 
- RGB val;
- 
- for(i=0; i < N; i++)
-  for(j=0; j < 3*M; j+=3) {
-    val.r = (int)charImage[i*3*M+j];
-    val.g = (int)charImage[i*3*M+j+1];
-    val.b = (int)charImage[i*3*M+j+2];
-    image.setPixelVal(i, j/3, val);
-  }
+ //
+ // Convert the unsigned characters to integers
+ //
 
-delete [] charImage;
+ int val;
+
+ for(i=0; i<N; i++)
+   for(j=0; j<M; j++) {
+     val = (int)charImage[i*M+j];
+     image.setPixelVal(i, j, val);     
+   }
+
+ delete [] charImage;
 
 }
