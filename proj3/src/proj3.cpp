@@ -181,13 +181,43 @@ int main() {
     } else {
         perror ("opendir");
     }
-    
-
-
 
     // size of rows and columns for this set of images
     int cols = lowY;
     int rows = lowX;
+
+
+    ImageType meanFace(cols, rows, 250);
+    int currentVal, tempVal;
+
+    // calculate mean face for set 1
+    for (int y = 0; y < cols; y++){
+        for (int z = 0; z < rows; z++){
+            for (int x = 0; x < imageToParse; x++){
+                // adds pixel to mean pixel
+                meanFace.getPixelVal(y,z, currentVal);
+                imageBank[0][x].getPixelVal(y,z, tempVal);
+                meanFace.setPixelVal(y,z, currentVal+tempVal);
+            }
+            meanFace.getPixelVal(y,z, currentVal);
+            meanFace.setPixelVal(y,z, currentVal/imageToParse);
+            meanFace.getPixelVal(y,z, currentVal);
+            //std::cout << currentVal << " ";
+        }
+        //std::cout << std::endl;
+    }
+
+    // subtract mean face from each image
+    for (int y = 0; y < cols; y++){
+        for (int z = 0; z < rows; z++){
+            for (int x = 0; x < imageToParse; x++){
+                // adds pixel to mean pixel
+                meanFace.getPixelVal(y,z, currentVal);
+                imageBank[0][x].getPixelVal(y,z, tempVal);
+                imageBank[0][x].setPixelVal(y,z, tempVal-currentVal);
+            }
+        }
+    }
 
     //holds eigenvectors for set of faces
     double** eigenBank = new double*[cols];
@@ -200,12 +230,15 @@ int main() {
     }
 
     //prints out all eigenvalues
-    /*for (int x = 1; x < imageToParse; x++) {
+    for (int x = 1; x < imageToParse; x++) {
         for (int y = 1; y < cols; y++) {
             std::cout << " " << eigenBank[x][y];
         }
         std::cout << "\n";
-    }*/
+    }
+
+    double minEigen = -9999.0;
+    double maxEigen = 9999.0;
 
     //makes combined eigenvector and normalizes it
     for (int x = 1; x < cols; x++) {
@@ -216,6 +249,7 @@ int main() {
             totalEigen += eigenBank[y][x];
         }
         combinedEigen[x] /= (imageToParse - 1);
+        //std::cout << "\n";
         //std::cout << combinedEigen[x] << " ";
     }
     totalEigen /= (imageToParse - 1);
@@ -235,9 +269,9 @@ int main() {
                 //    eigenPixel += eigenBank[i][j] * (double)currentPixel;
                 eigenPixel += combinedEigen[j] * currentPixel / totalEigen;
             }*/
-                std::cout << eigenPixel<< " ";
+                //std::cout << eigenPixel<< " ";
         }
-        std::cout << "\n";
+        //std::cout << "\n";
         //im1.getPixelVal(y, x, currentPixel);
         //std::cout << " " << currentPixel;
     }
