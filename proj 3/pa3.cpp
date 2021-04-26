@@ -4,8 +4,18 @@
 #include <iostream>
 #include <math.h>
 #include <stdlib.h>
+#include <cstdlib>
+#include <cstdio>
 #include <time.h>
+
+#include <filesystem>
+#include <string>
+
 #include "jacobi.h"
+#include "ReadImage.cpp"
+#include "ReadImageHeader.cpp"
+#include "WriteImage.cpp"
+
 
 int main() {
     int arrSize = 4;
@@ -59,9 +69,53 @@ int main() {
 
     }
 
+    //Variables
+    int N, M, Q;
+    // input images stored as char arrays
+    char train1[30] = "00001_930831_fa_a.pgm";
+    // output images
+    char out1[30] = "Output_1A.pgm";
+
+    ImageType imageBank[4][1205];
+
+
+    // iterates through all files in directory and stores their contents
+    std::string path = "/home/alden/Desktop/CS479/Proj3/Faces_FA_FB";
+    int x = 0;
+    for (const auto & imageFolder : std::filesystem::directory_iterator(path)) {
+        int y = 0;
+        for (const auto & entry : std::filesystem::directory_iterator(path + imageFolder)) {
+            readImageHeader(entry, N, M, Q, isImage); // read name
+            ImageType inputImg(N, M, Q); // initiate base and test images
+            readImage(entry, inputImg);
+            imageBank[x][y] = inputImg
+            y += 1;
+        }
+        x += 1
+    }
+
+    // math variables
+    double mean[2], sigma[2][2] = {{0,0}, {0,0}};
+    double R, G, bottom, threshR, threshG;
+    int counter;
+
+    // read an image in, repeat for each training image
+    bool isImage; // checks if image
+    //image 1
+    //readImageHeader(train1, N, M, Q, isImage); // read name
+    //ImageType inputImg(N, M, Q); // initiate base and test images
+    //ImageType TestImage(N, M, Q);
+    //readImage(train1, inputImg); // read named image into input
+
     bool trainingMode = true;
 
     // TRAINING MODE
+    // read images, find eigenvectors for average face
+
+    //reconstruction check: recreate images using all eigenvectors to ensure they are calculated correctly
+
+    // TEST MODE
+
 
 	return 0;
 }
