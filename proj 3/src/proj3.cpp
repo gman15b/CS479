@@ -80,7 +80,7 @@ int main() {
 
 
     // iterates through all files in directory and stores their contents
-    std::string path = "/home/alden/Desktop/CS479/Proj3/Faces_FA_FB";
+    std::string path = "Proj3/Faces_FA_FB";
     int x = 0;
     for (const auto & imageFolder : std::filesystem::directory_iterator(path)) {
         int y = 0;

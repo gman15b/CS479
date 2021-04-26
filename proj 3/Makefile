@@ -1,28 +1,32 @@
-TARGET = pa3
-LIBS = -lm  #List of external libraries required to link against (here m is the math Library, just a placeholder)
-HEADERS = jacobi.h image.h #List of all header files
-SRCS = pa3.cpp jacobi.c image.cpp #List of all source files
-OBJECTS := $(patsubst %.cpp,%.o,$(SRCS))  #Creates a list of object files (.o) for every entry under SRCS (source files)
-CXX = g++-8 #compiler command to be used
-CXX_FLAGS = -std=c++17 -std=gnu++17 -pthread -lstdc++fs #-Wall#compilation flags to be used (here std=c++11 is just for reference, not necessary)
+SRC_DIR := src
+OBJ_DIR := obj
+BIN_DIR := bin
 
-#Rule that states that default all and clean are make commands and not associated with any files
-.PHONY: default all clean
+TARGET := $(BIN_DIR)/proj3
 
-#Rule that defers make all to the TARGET rule
+
+SRC := $(wildcard $(SRC_DIR)/*.cpp)
+OBJ := $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+
+CXX_FLAGS := -Iinclude -std=c++11 -g
+CC := g++
+LDFLAGS  := -Llib
+LDLIBS   := -lm
+
+.PHONY: all clean
+
 all: $(TARGET)
 
-#Rule to compile a single object file
-%.o: %.cpp $(HEADERS)
-	$(CXX) $(CXX_FLAGS) -c $< -o $@
+$(TARGET): $(OBJ_DIR)/proj3.o | $(BIN_DIR)
+	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
-#Rule that makes all object files in the OBJECTS list, then links them all together to produce TARGET executable
-$(TARGET): $(OBJECTS)
-	$(CXX) $(CXX_FLAGS) $(OBJECTS) $(LIBS) -o $@
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
+	$(CC) $(CXX_FLAGS) -c $< -o $@
 
-#Rule to clean up the build (removes iteratively all object files .o and the execitable TARGET)
+$(BIN_DIR) $(OBJ_DIR):
+	mkdir -p $@
+
 clean:
-	-rm -f *.o
-	-rm -f $(TARGET)
+	@$(RM) -rv $(BIN_DIR) $(OBJ_DIR)
 
-
+-include $(OBJ:.o=.d)
