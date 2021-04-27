@@ -253,6 +253,7 @@ int main() {
 
     double minEigen = -9999.0;
     double maxEigen = 9999.0;
+    int tempPixel;
 
     // attempted eigenface creation
     ImageType im1 = meanFace;
@@ -269,24 +270,26 @@ int main() {
                 //keeps track of max and min eigenvalues so results can be normalized
                 minEigen = 9999.0;
                 maxEigen = -9999.0;
+                meanFace.getPixelVal(y,x, tempPixel);
+                //imageBank[0][i].getPixelVal(y,x, tempPixel);
 
                 for (int pic = 1; pic < imageToParse; pic++) {
-                    int pixelVal = eigenBank[pic][i];
-                    eigenPixel += pixelVal * currentPixel;
+                    int pixelVal = eigenBank[i][pic];
+                    eigenPixel += pixelVal;
                     if (pixelVal > maxEigen)
                         maxEigen = pixelVal;
                     if (pixelVal < minEigen)
                         minEigen = pixelVal;
                 }
-                eigenPixel /= imageToParse;
-                //normalizedPixel -= currentPixel;
-                int normalizedPixel = (int)(eigenPixel-minEigen)/(maxEigen-minEigen);
+                eigenPixel /= rows;
+                eigenPixel -= tempPixel;
+                int normalizedPixel = (int)255*(eigenPixel-minEigen)/(maxEigen-minEigen);
 
                 outputImage.setPixelVal(y,x,normalizedPixel);
-                if (i == 5)
-                    std::cout << normalizedPixel<< " ";
+                if (i == 2)
+                    std::cout << normalizedPixel << " ";
             }
-            if (i == 5)
+            if (i == 2)
                 std::cout << "\n";
             //im1.getPixelVal(y, x, currentPixel);
             //std::cout << " " << currentPixel;
