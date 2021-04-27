@@ -56,20 +56,21 @@ bool sortbysecdesc(const pair<int,double> &a, const pair<int,double> &b){
 
 
 // this takes in eigenBank of sorted eigen values. Returns legend of sorted values.
-vector<pair<int, double>> sortEigen(double** eigenBank, int size, int cols){
+double** sortEigen(double** eigenBank, int size, int cols, double eigenTotal[]){//vector<pair<int, double>>
 		vector< pair <int, double>> averages; // original place, avg
 		for (int i = 0; i < size; i++){
 			double avg = eigenAvg(eigenBank[i], cols);
 			averages.push_back(make_pair(i , avg)); // adds pair of original place and its avg
 		}
 		sort(averages.begin(), averages.end(), sortbysecdesc);
-		/*
+		
 		double** sortedBank = new double*[size];
 		for(int i = 0; i < size; i++){
 			sortedBank[i] = eigenBank[averages[i].first];
+            eigenTotal[i] = averages[i].second;
 			//cout << averages[i].second << endl;
 		}
 		return sortedBank;
-		*/
-	return averages;
+		
+	//return averages;
 }
