@@ -123,6 +123,7 @@ int main() {
     // output images
     char out1[30] = "Output_1A.pgm";
 
+    // number of images to read from each directory
     ImageType imageBank[4][605]; // 1205
     int imageToParse = 600; //600
 
