@@ -162,7 +162,7 @@ double** sortEigen(double** eigenBank, int size, int cols){
 		double** sortedBank = new double*[size];
 		for(int i = 0; i < size; i++){
 			sortedBank[i] = eigenBank[averages[i].first];
-			cout << averages[i].second << endl;
+			//cout << averages[i].second << endl;
 		}
 		return sortedBank;
 }

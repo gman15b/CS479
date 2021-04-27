@@ -124,7 +124,7 @@ int main() {
     char out1[30] = "Output_1A.pgm";
 
     ImageType imageBank[4][605]; // 1205
-    int imageToParse = 100; //600
+    int imageToParse = 600; //600
 
     // path for source files 
     char cwd[PATH_MAX];
@@ -325,7 +325,7 @@ int main() {
 // // compare images to eigenface to see if they are close enough
 //////////////////////////////////////////////////////////////////////
 
-    
+    // runs testImage on one of the training images to ensure it is working properly
     double memberDistance = testImage(eigenBank, imageBank[0][3], rows, cols, imageToParse);
     double threshold = 100.0;
     if (memberDistance < threshold)
@@ -333,7 +333,7 @@ int main() {
     else
         std::cout << "Face not detected\n";
 
-    //std::cout << memberDistance << "\n";
+    std::cout << "Minimum Distance: " << memberDistance << "\n";
 
 	return 0;
 }
