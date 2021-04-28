@@ -21,8 +21,41 @@ Gabriel Bermeo & Alden Bauman
 #include "image.cpp"
 #include "matrix.cpp"
 
-
 using namespace std;
+
+// returns test image difference from closest eigenvector
+double testImage(double** eigenBank, ImageType sampleImage, int rows, int cols, int numImages) {
+    // eigen info for test image
+    double* testEigen = runJacobi(sampleImage, rows, cols);
+    double minDistance = 99999.0;
+    double tempDistance, currentDistance;
+
+    /*for (int i = 1; i < rows; i++)
+        std::cout << testEigen[i] << " ";
+    std::cout << "\n\n";
+
+    for (int h = 0; h < 5; h++) {
+        for (int i = 1; i < rows; i++)
+            std::cout << eigenBank[h][i] << " ";
+        std::cout << "\n\n";
+    }*/
+
+    // finds the distance to the closest eigenvector
+    for (int x = 0; x < numImages; x++) {
+        currentDistance = 0.0;
+        for (int y = 1; y < rows; y++) {
+            tempDistance = testEigen[y] - eigenBank[x][y];
+            //gets absolute value of distance
+            if (tempDistance < 0.0)
+                tempDistance *= -1;
+            currentDistance += tempDistance;
+        }
+        if (currentDistance < minDistance)
+            minDistance = currentDistance;
+    }
+    return minDistance;
+    
+}
 
 int main() {
 // Part 1 testing for known eigenvalues.
@@ -80,6 +113,8 @@ int main() {
     }
 ///////////////////////////////////////////////////////////////////////
 // Part 2, reading in images for use. Training.
+// // TRAINING MODE
+// // read images, find eigenvectors for average face
 //////////////////////////////////////////////////////////////////////
     //Variables
     int N, M, Q;
@@ -89,8 +124,7 @@ int main() {
     char out1[30] = "Output_1A.pgm";
 
     ImageType imageBank[4][605]; // 1205
-    int imageToParse = 150;
-
+    int imageToParse = 100; //600
 
     // path for source files 
     char cwd[PATH_MAX];
@@ -105,8 +139,6 @@ int main() {
     int highY = 60;
     int lowX = 16;
     int lowY = 20;
-
-
 
     DIR *dir; 
     DIR *dir2; 
@@ -235,7 +267,7 @@ int main() {
 
     // attempted eigenface creation
     ImageType im1 = meanFace;
-    for (int i = 1; i < rows; i++) {
+    for (int i = 1; i < imageToParse; i++) {
         ImageType outputImage(cols, rows, 250);
         // applys eigenvectors to each pixel
         for (int x = 0; x < rows; x++) {
@@ -248,10 +280,10 @@ int main() {
                 //keeps track of max and min eigenvalues so results can be normalized
                 minEigen = 9999.0;
                 maxEigen = -9999.0;
-                meanFace.getPixelVal(y,x, tempPixel);
-                //imageBank[0][i].getPixelVal(y,x, tempPixel);
+                //meanFace.getPixelVal(y,x, tempPixel);
+                imageBank[0][i].getPixelVal(y,x, tempPixel);
 
-                for (int pic = 1; pic < imageToParse; pic++) {
+                for (int pic = 1; pic < rows; pic++) {
                     int pixelVal = eigenBank[i][pic];
                     eigenPixel += pixelVal;
                     if (pixelVal > maxEigen)
@@ -264,13 +296,11 @@ int main() {
                 int normalizedPixel = (int)255*(eigenPixel-minEigen)/(maxEigen-minEigen);
 
                 outputImage.setPixelVal(y,x,normalizedPixel);
-                if (i == 2)
-                continue;
-                    //std::cout << normalizedPixel << " ";
+                if (i == -1)
+                    std::cout << normalizedPixel << " ";
             }
-            if (i == 2)
-                continue;
-                //std::cout << "\n";
+            if (i == -1)
+                std::cout << "\n";
             //im1.getPixelVal(y, x, currentPixel);
             //std::cout << " " << currentPixel;
         }
@@ -290,30 +320,25 @@ int main() {
 
     //}*/
 
-    /*Matrix matrixBank[4][1205];
+///////////////////////////////////////////////////////////////////////
+// // TEST MODE
+// // compare images to eigenface to see if they are close enough
+//////////////////////////////////////////////////////////////////////
 
-    for (int x = 0; x < imageToParse; x++) {
-        Matrix* m = new Matrix(highX, highY);
-        matrixBank[0][x] = *m;
-        matrixBank[0][x].convertImage(imageBank[0][x]);
-        matrixBank[0][x].runJacobi();
-    }*/
+    
+    double memberDistance = testImage(eigenBank, imageBank[0][3], rows, cols, imageToParse);
+    double threshold = 100.0;
+    if (memberDistance < threshold)
+        std::cout << "Face detected\n";
+    else
+        std::cout << "Face not detected\n";
 
-    // math variables
-    double mean[2], sigma[2][2] = {{0,0}, {0,0}};
-    double R, G, bottom, threshR, threshG;
-    int counter;
-
-
-    bool trainingMode = true;
-
-    // TRAINING MODE
-    // read images, find eigenvectors for average face
-
-    //reconstruction check: recreate images using all eigenvectors to ensure they are calculated correctly
-
-    // TEST MODE
-
+    //std::cout << memberDistance << "\n";
 
 	return 0;
 }
+
+
+
+
+
