@@ -9,10 +9,9 @@ Gabriel Bermeo & Alden Bauman
 #include <cstdlib>
 #include <cstdio>
 #include <time.h>
-
-//#include <filesystem>
+#include <unistd.h>
 #include <dirent.h>
-#include <string>
+#include "cstring"
 #include <vector>
 
 #include "jacobi.cpp"
@@ -20,31 +19,10 @@ Gabriel Bermeo & Alden Bauman
 #include "ReadImageHeader.cpp"
 #include "WriteImage.cpp"
 #include "image.cpp"
-#include "cstring"
+#include "matrix.cpp"
 
-#include <unistd.h>
 
 using namespace std;
-
-double* runJacobi(ImageType image, int rows, int cols){ // converts matrix to 2d pointer and runs jacobi on it
-    double** dblImages = new double*[cols];
-    double** covMatrix = new double*[cols];
-    double* eigenValues = new double[cols];
-
-    for(int i = 0; i < cols; i++){
-	    dblImages[i] = new double[rows];
-        covMatrix[i] = new double[rows];
-	    for(int j = 0; j < rows; j++){
-            int tempPixel;
-		    image.getPixelVal(i,j, tempPixel);
-            dblImages[i][j] = (double)tempPixel;
-        }
-    }
-
-    jacobi(dblImages, rows-1, eigenValues, covMatrix);
-    return eigenValues;
-
-}
 
 int main() {
 // Part 1 testing for known eigenvalues.

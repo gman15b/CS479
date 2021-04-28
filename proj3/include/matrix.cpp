@@ -73,7 +73,7 @@ Matrix Matrix::trans(){ // iterate matrix, transpose its items
 
 }
 
-void Matrix::convertImage(ImageType[][] imageBank){ // iterate matrix, transpose its items
+void Matrix::convertImage(ImageType image){ // iterate matrix, transpose its items
 	int val = 0;
 	for(int i = 0; i < rows; ++i ){
 		for(int j = 0; j < cols; ++j){
@@ -82,37 +82,60 @@ void Matrix::convertImage(ImageType[][] imageBank){ // iterate matrix, transpose
 		}
 	}
 }
-
-void Matrix::runJacobi(){ // converts matrix to 2d pointer and runs jacobi on it
+/*
+double* Matrix::runJacobiInternal(){ // converts matrix to 2d pointer and runs jacobi on it
 	double** dblImages = new double*[cols];
-
+	int tempPixel = 0;
+	// convert matrix to 2d double
 	for(int i = 0; i < rows; i++){
-		dblImages[i] = new double[i];
+		dblImages[i] = new double[cols];
+        covMatrix[i] = new double[cols];
 		for(int j = 0; j < cols; j++){
-			dblImages[i][j] = images[i][j];
+		    image.getPixelVal(i,j, tempPixel);
+			dblImages[i][j] = (double)tempPixel;
 		}
 	}
-
-	worked = jacobi(dblImages, rows-1, eigenValues, covMatrix);
-
+	// run jacobi on it
+	jacobi(dblImages, rows-1, eigenValues covMatrix);
+	return eigenValues;
 }
-
-// average a matrix's eigen values
-double Matrix::eigenAvg(){
-	double avg = 0;
-	if(eigenValues == nullptr){ return avg;}
-	for(int i = 0; i < rows; i++){
-		avg += eigenValues[i];
-	}
-	return avg/rows;
-}
-
+*/
 
 //////////////////// friend functions //////////////////////////////////////////
 
 // sort eigenvalues of matrix, returning sorted matrix.
 // takes in matrix and reference to array.
 // note:jacobi takes array doubles for eigen values (w), and 2d doubles / matrix (v) 
+double* runJacobi(ImageType image, int rows, int cols){ // converts matrix to 2d pointer and runs jacobi on it
+    double** dblImages = new double*[cols];
+    double** covMatrix = new double*[cols];
+    double* eigenValues = new double[cols];
+
+    for(int i = 0; i < cols; i++){
+	    dblImages[i] = new double[rows];
+        covMatrix[i] = new double[rows];
+	    for(int j = 0; j < rows; j++){
+            int tempPixel;
+		    image.getPixelVal(i,j, tempPixel);
+            dblImages[i][j] = (double)tempPixel;
+        }
+    }
+
+    jacobi(dblImages, rows-1, eigenValues, covMatrix);
+    return eigenValues;
+
+}
+
+// average a matrix's eigen values
+double eigenAvg(double* eigenValues){
+	double avg = 0;
+	int rows = sizeof(eigenValues);
+	if(eigenValues == nullptr){ return avg;}
+	for(int i = 0; i < rows; i++){
+		avg += eigenValues[i];
+	}
+	return avg/rows;
+}
 
 Matrix idMatrix(int size){ //return an identity matrix of given dimensions
 	Matrix identity = Matrix( size, size);
@@ -124,18 +147,20 @@ Matrix idMatrix(int size){ //return an identity matrix of given dimensions
 	return identity;
 }
 
-// this takes in vector of eigenvalues, and matrix of eigenvectors.
-void Matrix::sortEigen(){
+// this takes in array of eigenvalues. Returns sorted symmetric matrix.
+double** sortEigen(double* eigenValues){
+		int size = sizeof(eigenValues);
+		double** covMatrix = new double*[size];
 		// iterate values
-
-		sort(eigenValues, eigenValues + rows); // sort descending
+		// sort values array
+		sort(eigenValues, eigenValues + size);
 		int index = 0;
-		for(int i = 0; i < rows; i++){
-			for(int j = 0; j < cols; j++){
+		for(int i = 0; i < size; i++){
+			for(int j = 0; j < size; j++){
 					if(i == index++){ 
 						covMatrix[i][j] == eigenValues[i];
 					}
 			}
 		}
-
+		return covMatrix;
 }

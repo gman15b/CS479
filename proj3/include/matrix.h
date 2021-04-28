@@ -14,10 +14,6 @@ class Matrix {
 		int rows;
 		int worked;
 		vector<vector<double>> images; // items in a row, here 2d array of double for the images
-		
-		double* eigenValues;
-		double** covMatrix;
-		
 	// constructors	
 		Matrix(); // ctor
 		Matrix(int row, int col); 
@@ -25,11 +21,11 @@ class Matrix {
 	// functions
 		Matrix getRow(int rowNum) const;
 		Matrix trans(); // transpose matrix items
-		void convertImage(ImageType[][] imageBank); // convert 1 image into 2d vector for images
-		void runJacobi();
-		double eigenAvg();
-		
+		void convertImage(ImageType image); // convert 1 image into 2d vector for images
+	
 		// friends
+		friend double eigenAvg(double* eigenValues);
+		friend double* runJacobi(ImageType image, int rows, int cols);
 		friend Matrix idMatrix(int size);
-		void sortEigen();
+		friend double** sortEigen(double* eigenValues);
 };
