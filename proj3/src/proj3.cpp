@@ -424,6 +424,9 @@ int main() {
         delete[] outputLoc;
     }
 
+    //writeImage("test1.pgm", query[0]);
+    //writeImage("test2.pgm", queryB[0]);
+
 
     return 0;
 }
