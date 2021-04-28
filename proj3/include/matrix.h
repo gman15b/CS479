@@ -3,7 +3,7 @@
 #include <vector>
 #include "image.h"
 
-// define what a matrix is for use through/home/gbermeo/Desktop/CS479/proj 3/include/ReadImage.cppout project
+// define what a matrix is for use throught
 
 using namespace std;
 
@@ -25,7 +25,7 @@ class Matrix {
 	// functions
 		Matrix getRow(int rowNum) const;
 		Matrix trans(); // transpose matrix items
-		void convertImage(ImageType image); // convert 1 image into 2d vector for images
+		void convertImage(ImageType[][] imageBank); // convert 1 image into 2d vector for images
 		void runJacobi();
 		double eigenAvg();
 		

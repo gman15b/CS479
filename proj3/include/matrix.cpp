@@ -73,7 +73,7 @@ Matrix Matrix::trans(){ // iterate matrix, transpose its items
 
 }
 
-void Matrix::convertImage(ImageType image){ // iterate matrix, transpose its items
+void Matrix::convertImage(ImageType[][] imageBank){ // iterate matrix, transpose its items
 	int val = 0;
 	for(int i = 0; i < rows; ++i ){
 		for(int j = 0; j < cols; ++j){
