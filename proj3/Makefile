@@ -1,6 +1,7 @@
 SRC_DIR := src
 OBJ_DIR := obj
 BIN_DIR := bin
+FACE_DIR := eigenFaces
 
 TARGET := $(BIN_DIR)/proj3
 
@@ -28,6 +29,6 @@ $(BIN_DIR) $(OBJ_DIR):
 	mkdir -p $@
 
 clean:
-	@$(RM) -rv $(BIN_DIR) $(OBJ_DIR)
+	@$(RM) -r $(BIN_DIR) $(OBJ_DIR) $(FACE_DIR)/*.pgm
 
 -include $(OBJ:.o=.d)
