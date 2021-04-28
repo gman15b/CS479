@@ -79,7 +79,7 @@ int main() {
         }
     }
 ///////////////////////////////////////////////////////////////////////
-// Part 2, reading in images for use.
+// Part 2, reading in images for use. Training.
 //////////////////////////////////////////////////////////////////////
     //Variables
     int N, M, Q;
@@ -228,7 +228,7 @@ int main() {
         //std::cout << combinedEigen[x] << " ";
     }
     totalEigen /= (imageToParse - 1);
-
+    sortEigen(eigenBank, imageToParse, cols);
     double minEigen = -9999.0;
     double maxEigen = 9999.0;
     int tempPixel;
@@ -265,10 +265,12 @@ int main() {
 
                 outputImage.setPixelVal(y,x,normalizedPixel);
                 if (i == 2)
-                    std::cout << normalizedPixel << " ";
+                continue;
+                    //std::cout << normalizedPixel << " ";
             }
             if (i == 2)
-                std::cout << "\n";
+                continue;
+                //std::cout << "\n";
             //im1.getPixelVal(y, x, currentPixel);
             //std::cout << " " << currentPixel;
         }

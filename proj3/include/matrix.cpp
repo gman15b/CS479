@@ -127,14 +127,12 @@ double* runJacobi(ImageType image, int rows, int cols){ // converts matrix to 2d
 }
 
 // average a matrix's eigen values
-double eigenAvg(double* eigenValues){
+double eigenAvg(double* eigenValues, int size){
 	double avg = 0;
-	int rows = sizeof(eigenValues);
-	if(eigenValues == nullptr){ return avg;}
-	for(int i = 0; i < rows; i++){
+	for(int i = 0; i < size; i++){
 		avg += eigenValues[i];
-	}
-	return avg/rows;
+	}	
+	return (double)avg/size;
 }
 
 Matrix idMatrix(int size){ //return an identity matrix of given dimensions
@@ -147,20 +145,24 @@ Matrix idMatrix(int size){ //return an identity matrix of given dimensions
 	return identity;
 }
 
-// this takes in array of eigenvalues. Returns sorted symmetric matrix.
-double** sortEigen(double* eigenValues){
-		int size = sizeof(eigenValues);
-		double** covMatrix = new double*[size];
-		// iterate values
-		// sort values array
-		sort(eigenValues, eigenValues + size);
-		int index = 0;
-		for(int i = 0; i < size; i++){
-			for(int j = 0; j < size; j++){
-					if(i == index++){ 
-						covMatrix[i][j] == eigenValues[i];
-					}
-			}
+
+bool sortbysecdesc(const pair<int,double> &a, const pair<int,double> &b){
+       return a.second>b.second;
+} // helper for next function
+
+
+// this takes in eigenBank of sorted eigen values. Returns sorted, averaged eigen bank.
+double** sortEigen(double** eigenBank, int size, int cols){
+		vector< pair <int, double>> averages; // original place, avg
+		for (int i = 0; i < size; i++){
+			double avg = eigenAvg(eigenBank[i], cols);
+			averages.push_back(make_pair(i , avg)); // adds pair of original place and its avg
 		}
-		return covMatrix;
+		sort(averages.begin(), averages.end(), sortbysecdesc);
+		double** sortedBank = new double*[size];
+		for(int i = 0; i < size; i++){
+			sortedBank[i] = eigenBank[averages[i].first];
+			cout << averages[i].second << endl;
+		}
+		return sortedBank;
 }
