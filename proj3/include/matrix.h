@@ -22,10 +22,4 @@ class Matrix {
 		Matrix getRow(int rowNum) const;
 		Matrix trans(); // transpose matrix items
 		void convertImage(ImageType image); // convert 1 image into 2d vector for images
-	
-		// friends
-		friend double eigenAvg(double* eigenValues, int size);
-		friend double* runJacobi(ImageType image, int rows, int cols);
-		friend Matrix idMatrix(int size);
-		friend double** sortEigen(double** eigenValues, int size, int cols);
 };

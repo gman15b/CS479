@@ -1,7 +1,8 @@
 SRC_DIR := src
 OBJ_DIR := obj
 BIN_DIR := bin
-FACE_DIR := eigenFaces
+FACE_DIR := match
+EXP_DIR := experiment
 
 TARGET := $(BIN_DIR)/proj3
 
@@ -29,6 +30,6 @@ $(BIN_DIR) $(OBJ_DIR):
 	mkdir -p $@
 
 clean:
-	@$(RM) -r $(BIN_DIR) $(OBJ_DIR) $(FACE_DIR)/*.pgm
+	@$(RM) -r $(BIN_DIR) $(OBJ_DIR) $(FACE_DIR)/*.pgm $(EXP_DIR)/*.pgm
 
 -include $(OBJ:.o=.d)
