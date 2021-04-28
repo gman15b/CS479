@@ -134,7 +134,7 @@ int main() {
     // number of images to read from each directory
     ImageType gallery[1205]; // 1205
     ImageType query[1196];
-    ImageType queryB[1196];
+    //ImageType queryB[1196];
     // path for source files 
     char cwd[PATH_MAX];
     getcwd(cwd, sizeof(cwd));
@@ -164,7 +164,7 @@ int main() {
                 const char* combinedPath = &combined[0];
                 //std::cout << combinedPath << endl << x << endl;
                 if ((dir2 = opendir(combinedPath)) != nullptr) {
-                    //cout << combinedPath << endl;
+                    cout << combinedPath << endl;
                     while ((fileRead = readdir(dir2)) != nullptr && !exitLoop) {
                         string extension2 = fileRead->d_name;
                         string imageLoc = combined + "/" + extension2;
@@ -185,15 +185,7 @@ int main() {
                             ImageType inputImg(N, M, Q); // initiate base and test images
                             readImage(entry, inputImg);
                             query[y] = inputImg;
-                        }else if (y >= 0 && x == 4) {
-                            char* entry = imageLocChar;
-                            bool isImage;
-                            readImageHeader(entry, N, M, Q, isImage); // read name
-                            ImageType inputImg(N, M, Q); // initiate base and test images
-                            readImage(entry, inputImg);
-                            queryB[y] = inputImg;
                         }
-
                         y += 1;
                         if (y > imageToParse)
                             exitLoop = true;
@@ -424,8 +416,8 @@ int main() {
         delete[] outputLoc;
     }
 
-    //writeImage("test1.pgm", query[0]);
-    //writeImage("test2.pgm", queryB[0]);
+    writeImage("test1.pgm", query[0]);
+    writeImage("test2.pgm", gallery[0]);
 
 
     return 0;
