@@ -9,20 +9,22 @@ Gabriel Bermeo & Alden Bauman
 #include <cstdlib>
 #include <cstdio>
 #include <time.h>
-
-//#include <filesystem>
+#include "cstring"
 #include <dirent.h>
 #include <string>
 #include <vector>
+#include <unistd.h>
 
 #include "jacobi.cpp"
 #include "ReadImage.cpp"
 #include "ReadImageHeader.cpp"
 #include "WriteImage.cpp"
 #include "image.cpp"
-#include "cstring"
+#include "matrix.cpp"
 
-#include <unistd.h>
+
+#define FACES 1505
+
 
 using namespace std;
 
@@ -84,11 +86,11 @@ int main() {
 //////////////////////////////////////////////////////////////////////
     //Variables
     int N, M, Q;
-    // input images stored as char arrays
-    char train1[30] = "00001_930831_fa_a.pgm";
-    // output images
-    char out1[30] = "Output_1A.pgm";
 
+    Matrix folder[4][FACES];
+    Matrix folder2[FACES];
+    Matrix folder3[FACES];
+    Matrix folder4[FACES];
     ImageType imageBank[4][1505];
 
     // path for source files 
@@ -131,9 +133,8 @@ int main() {
                             readImageHeader(entry, N, M, Q, isImage); // read name
                             ImageType inputImg(N, M, Q); // initiate base and test images
                             readImage(entry, inputImg);
-                            imageBank[x][y] = inputImg;
+                            imageBank[x][y].convertImage(inputImg);
                         }
-
                         y += 1;
                     }
                 }
@@ -146,6 +147,7 @@ int main() {
     } else {
         perror ("opendir");
     }
+
 
     for (auto file : files) std::cout << file << "| ";
     std::cout << endl;
@@ -161,6 +163,20 @@ int main() {
         }
         x += 1;
     }*/
+    /*
+    Matrix test[4][1505]; // initialize blank array same size as img bank
+
+    for(int i = 0; i < 4; i++){
+        for(int j = 0; j < 150; j++){
+            test[i][j].convertImage(imageBank[i][j]);
+        }
+    }
+    */
+    // input images stored as char arrays
+    char train1[30] = "00001_930831_fa_a.pgm";
+    // output images
+    char out1[30] = "Output_1A.pgm";
+
 
     // math variables
     double mean[2], sigma[2][2] = {{0,0}, {0,0}};
