@@ -316,6 +316,7 @@ int main() {
         // outputs test eigenface
         writeImage(outputLoc, outputImage);
         delete [] outputLoc;
+        delete [] outputLoc;
     }
 
     //}*/
